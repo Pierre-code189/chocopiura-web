@@ -1,0 +1,39 @@
+/* --- ESTADO INICIAL (ARRIBA DEL TODO) --- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 25px 40px; /* Un poco más ancha para respirar mejor */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 500;
+  background-color: transparent; /* ¡Totalmente invisible! */
+  box-shadow: none; /* Sin sombra al inicio */
+  transition: all 0.4s ease-in-out; /* Esta es la clave: el cambio dura casi medio segundo, muy suave */
+  box-sizing: border-box; 
+}
+
+/* --- ESTADO DURANTE EL SCROLL (BAJANDO) --- */
+.navbar.navbar-scrolled {
+  background-color: rgba(56, 34, 15, 0.90); /* Color chocolate al 90% de opacidad */
+  backdrop-filter: blur(10px); /* Efecto Glassmorphism: Desenfoca lo que está detrás */
+  padding: 12px 40px; /* La barra se "encoge" ligeramente para dar más espacio a la tienda */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Aparece una sombra elegante */
+}
+
+/* --- ESTILOS DE LOS BOTONES Y LETRAS (Se mantienen) --- */
+.nav-logo { color: #F1C40F; font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; }
+.nav-links { display: flex; gap: 20px; }
+.nav-links a { color: #FDFBF7; text-decoration: none; font-weight: bold; transition: color 0.3s; }
+.nav-links a:hover { color: #F1C40F; }
+.carrito-btn-nav { background-color: #C28F5B; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
+.carrito-btn-nav:hover { background-color: #A67B4D; transform: scale(1.05); }
+
+/* --- CELULARES --- */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .navbar { padding: 20px 20px; }
+  .navbar.navbar-scrolled { padding: 12px 20px; }
+}

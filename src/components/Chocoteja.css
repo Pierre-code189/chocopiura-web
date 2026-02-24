@@ -1,0 +1,7 @@
+.tarjeta-chocoteja { background-color: #FFFFFF; border: none; border-radius: 12px; padding: 20px; width: 100%; max-width: 280px; box-shadow: 0 10px 30px rgba(56, 34, 15, 0.05); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease; overflow: hidden; }
+.tarjeta-chocoteja:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 40px rgba(56, 34, 15, 0.15); }
+.imagen-chocoteja { width: calc(100% + 40px); height: 200px; object-fit: cover; border-radius: 0; margin: -20px -20px 15px -20px; }
+.tarjeta-chocoteja h3 { font-family: system-ui, -apple-system, sans-serif; color: #38220F; margin-bottom: 5px; }
+.tarjeta-chocoteja p { color: #A67B4D; margin-bottom: 0; }
+.tarjeta-chocoteja button { background-color: #5C3A21; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; }
+.tarjeta-chocoteja button:hover { background-color: #38220F; }

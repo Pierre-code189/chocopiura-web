@@ -1,0 +1,10 @@
+.footer { background-color: #38220F; color: #FDFBF7; padding: 50px 20px 20px; margin-top: auto; }
+.footer-contenido { display: flex; flex-wrap: wrap; justify-content: space-around; max-width: 1000px; margin: 0 auto; gap: 30px; text-align: left; }
+.footer-bloque { display: flex; flex-direction: column; gap: 15px; max-width: 300px; }
+.footer-logo { color: #F1C40F; font-size: 1.8rem; margin: 0; font-family: 'Georgia', serif; }
+.footer-bloque p { color: #EADDCD; font-size: 0.95rem; line-height: 1.5; }
+.footer-bloque h4 { color: #C28F5B; margin: 0; font-size: 1.2rem; }
+.footer-bloque a { color: #FDFBF7; text-decoration: none; font-size: 0.95rem; transition: color 0.3s, transform 0.2s; width: fit-content; }
+.footer-bloque a:hover { color: #F1C40F; transform: translateX(5px); }
+.redes-iconos { display: flex; flex-direction: column; gap: 10px; }
+.footer-copyright { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(253, 251, 247, 0.1); font-size: 0.85rem; color: #A67B4D; }

@@ -1,0 +1,7 @@
+.seccion-beneficios { background-color: #38220F; color: #FDFBF7; padding: 60px 20px 100px; width: 100%; position: relative; }
+.contenedor-beneficios { max-width: 1000px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; }
+.beneficio-item { flex: 1; min-width: 250px; text-align: center; padding: 20px; background-color: rgba(255, 255, 255, 0.05); border-radius: 12px; transition: transform 0.3s; }
+.beneficio-item:hover { transform: translateY(-10px); }
+.beneficio-icono { font-size: 3rem; margin-bottom: 15px; }
+.beneficio-item h3 { color: #F1C40F; font-size: 1.3rem; margin-bottom: 10px; }
+.beneficio-item p { font-size: 0.95rem; line-height: 1.6; color: #EADDCD; }

@@ -1,0 +1,21 @@
+/* src/components/PanelAdmin.css */
+.panel-contenedor { display: flex; min-height: 100vh; background-color: #1A0F07; color: #FDFBF7; font-family: sans-serif; }
+.panel-sidebar { width: 250px; background-color: #2C1A0B; padding: 30px 20px; border-right: 1px solid #4A3018; display: flex; flex-direction: column; }
+.panel-main { flex: 1; padding: 40px; overflow-y: auto; }
+
+/* Tarjetas y Contenedores */
+.tarjeta-panel { background-color: #2C1A0B; padding: 25px; border-radius: 12px; border: 1px solid #4A3018; margin-bottom: 20px; }
+.tarjeta-dashboard { padding: 20px; border-radius: 12px; border: 1px solid #4A3018; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+
+/* Tablas */
+.tabla-panel { width: 100%; border-collapse: collapse; margin-top: 15px; }
+.tabla-panel th { background-color: #1A0F07; color: #C28F5B; padding: 12px; text-align: left; }
+.tabla-panel td { padding: 12px; border-bottom: 1px solid #4A3018; }
+
+/* Formularios y Botones */
+.input-panel { padding: 10px; border-radius: 6px; border: 1px solid #C28F5B; background: #1A0F07; color: white; outline: none; width: 100%; box-sizing: border-box; }
+.btn-accion { padding: 8px 15px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; color: white; transition: 0.3s; }
+.btn-verde { background-color: #27ae60; }
+.btn-rojo { background-color: #e74c3c; }
+.btn-amarillo { background-color: #f39c12; color: #1A0F07; }
+.btn-azul { background-color: #3498db; }

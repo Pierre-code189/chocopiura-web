@@ -1,0 +1,115 @@
+/* =========================================
+   ESTILOS DE LA PORTADA PRINCIPAL (HERO)
+   ========================================= */
+
+/* --- CONTENEDOR PRINCIPAL CON PARALLAX --- */
+#inicio { 
+  /* Gradiente semitransparente + foto de fondo */
+  background: linear-gradient(rgba(253, 251, 247, 0.6), rgba(253, 251, 247, 0.9)), 
+              url('https://www.chocolatestinkisqa.com/web/image/product.product/28/image_1024/Chocotejas%20Premium%20%E2%80%93%20Caja%20x%2010%20Unidades?unique=5231890') center/cover; 
+  
+  background-attachment: fixed; /* <-- LA MAGIA DEL EFECTO 3D (PARALLAX) */
+  
+  padding-top: 150px; 
+  padding-bottom: 120px; 
+  min-height: 100vh; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  text-align: center; 
+}
+
+.contenido-inicio { 
+  max-width: 800px; 
+  padding: 0 20px; 
+}
+
+/* --- TEXTOS PRINCIPALES --- */
+#inicio h1 { 
+  font-size: clamp(3rem, 8vw, 5rem); 
+  color: #38220F; 
+  margin-bottom: 20px; 
+  text-shadow: 2px 2px 10px rgba(255,255,255,0.8); 
+}
+
+#inicio p { 
+  font-size: 1.2rem; 
+  color: #38220F; 
+  max-width: 600px; 
+  margin: 0 auto 30px; 
+}
+
+/* --- ANIMACIONES DE ENTRADA (CASCADA) --- */
+.animacion-subir { 
+  opacity: 0; 
+  transform: translateY(40px); 
+  animation: subirSuave 1s ease-out forwards; 
+}
+
+.retraso-1 { animation-delay: 0.3s; } 
+.retraso-2 { animation-delay: 0.6s; }
+
+@keyframes subirSuave { 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
+}
+
+/* --- BOTÓN DE VER CATÁLOGO --- */
+.btn-primario { 
+  display: inline-block; 
+  background-color: #C28F5B; 
+  color: white; 
+  text-decoration: none; 
+  padding: 15px 35px; 
+  border: none; 
+  font-size: 1.2rem; 
+  border-radius: 30px; 
+  font-weight: bold; 
+  margin-top: 20px; 
+  box-shadow: 0 4px 15px rgba(194, 143, 91, 0.4); 
+  transition: all 0.3s ease; 
+  cursor: pointer; 
+}
+
+.btn-primario:hover { 
+  background-color: #A67B4D; 
+  transform: translateY(-3px); 
+  box-shadow: 0 6px 20px rgba(194, 143, 91, 0.6); 
+}
+
+/* --- FLECHA QUE REBOTA --- */
+.flecha-rebote { 
+  position: absolute; 
+  bottom: 80px; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  font-size: 2rem; 
+  color: #C28F5B; 
+  text-decoration: none; 
+  opacity: 0; 
+  animation: subirSuave 0.5s forwards 1.2s, rebotar 2s infinite 1.7s; 
+}
+
+@keyframes rebotar { 
+  0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); } 
+  40% { transform: translate(-50%, -15px); } 
+  60% { transform: translate(-50%, -7px); } 
+}
+
+/* --- OLA DECORATIVA (TRANSICIÓN DE SECCIÓN) --- */
+.ola-decorativa { 
+  position: absolute; 
+  bottom: -1px; 
+  left: 0; 
+  width: 100%; 
+  overflow: hidden; 
+  line-height: 0; 
+  height: 60px; 
+}
+
+.relative-section { 
+  position: relative; 
+}

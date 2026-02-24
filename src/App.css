@@ -1,0 +1,422 @@
+/* =========================================
+   ESTILOS GLOBALES Y COMPARTIDOS (App.css)
+   ========================================= */
+
+/* --- GLOBALES --- */
+.seccion { 
+  padding: 100px 20px 40px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
+
+/* --- SCROLLBAR PERSONALIZADO (BARRA DE DESPLAZAMIENTO) --- */
+/* 1. El ancho total de la barra */
+::-webkit-scrollbar {
+  width: 12px; 
+}
+
+/* 2. El "carril" o pista por donde se mueve la barra (Fondo claro) */
+::-webkit-scrollbar-track {
+  background: #FDFBF7; 
+}
+
+/* 3. La barrita móvil que arrastras (Color caramelo) */
+::-webkit-scrollbar-thumb {
+  background-color: #C28F5B; 
+  border-radius: 10px; /* La hacemos redondita */
+  border: 3px solid #FDFBF7; /* Le damos un borde del color del fondo para que parezca más delgada */
+}
+
+/* 4. Cuando pasas el mouse por encima de la barrita (Un tono más oscuro) */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #A67B4D; 
+}
+
+/* --- CATÁLOGO Y FILTROS --- */
+#productos { 
+  background-color: #FDFBF7; 
+  padding-top: 80px; 
+  min-height: 100vh; 
+}
+
+.catalogo { 
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center; 
+  gap: 30px; 
+  margin-top: 30px; 
+  max-width: 1000px; 
+}
+
+.filtros-categoria { 
+  display: flex; 
+  justify-content: center; 
+  gap: 15px; 
+  margin-bottom: 40px; 
+  flex-wrap: wrap; 
+}
+
+.btn-filtro { 
+  background-color: transparent; 
+  color: #8B4513; 
+  border: 2px solid #C28F5B; 
+  padding: 8px 24px; 
+  border-radius: 30px; 
+  font-family: inherit; 
+  font-size: 0.95rem; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+}
+
+.btn-filtro:hover, .btn-filtro.activo { 
+  background-color: #C28F5B; 
+  color: #FDFBF7; 
+  transform: translateY(-2px); 
+  box-shadow: 0 6px 15px rgba(194, 143, 91, 0.3); 
+}
+
+/* --- VENTANAS EMERGENTES (Fondo y contenedor base para ambos Modales) --- */
+.modal-fondo { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100vw; 
+  height: 100vh; 
+  background-color: rgba(56, 34, 15, 0.7); 
+  backdrop-filter: blur(5px); 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  z-index: 1000; 
+  padding: 20px; 
+  box-sizing: border-box;
+}
+
+.modal-contenido { 
+  background-color: #FDFBF7; 
+  color: #4A3018; 
+  padding: 30px 20px; 
+  border-radius: 16px; 
+  width: 100%; 
+  max-width: 450px; 
+  max-height: 90vh; 
+  overflow-y: auto; 
+  position: relative; 
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3); 
+}
+
+.modal-titulo { 
+  color: #38220F; 
+  text-align: center; 
+  margin-top: 0; 
+  margin-bottom: 15px;
+}
+
+.btn-cerrar { 
+  position: absolute; 
+  top: 15px; 
+  right: 15px; 
+  background: none; 
+  border: none; 
+  font-size: 1.5rem; 
+  cursor: pointer; 
+  color: #5C3A21;
+}
+
+/* --- NOTIFICACIÓN FLOTANTE (TOAST) --- */
+.toast-notificacion { 
+  position: fixed; 
+  bottom: 30px; 
+  right: 30px; 
+  background-color: #38220F; 
+  color: #FDFBF7; 
+  padding: 15px 25px; 
+  border-radius: 8px; 
+  border-left: 5px solid #C28F5B; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+  font-weight: bold; 
+  font-size: 1rem; 
+  z-index: 2000; 
+  transform: translateX(150%); 
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+.toast-notificacion.mostrar { 
+  transform: translateX(0); 
+}
+
+/* ADAPTACIÓN PARA CELULARES */
+@media (max-width: 768px) {
+  .toast-notificacion { 
+    bottom: 20px; 
+    right: 50%; 
+    transform: translate(50%, 150%); 
+    width: 90%; 
+    text-align: center; 
+  }
+  .toast-notificacion.mostrar { 
+    transform: translate(50%, 0); 
+  }
+}
+
+/* =========================================
+   ANIMACIONES DE SCROLL (REVEAL EFECTO)
+   ========================================= */
+
+/* 1. El estado inicial: Transparente y movido un poco hacia abajo */
+.revelar-oculto {
+  opacity: 0;
+  transform: translateY(60px); /* Empieza 60 píxeles más abajo */
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Una transición suave de casi 1 segundo */
+}
+
+/* 2. El estado final: Totalmente visible y en su posición original */
+.revelar-mostrar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================
+   MODO CHOCOLATE OSCURO (DARK MODE)
+   ========================================= */
+
+/* Transición suave para que la página no "parpadee" de golpe al cambiar de color */
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* --- ESTILOS DEL INTERRUPTOR --- */
+.btn-tema {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.btn-tema:hover {
+  transform: scale(1.2) rotate(15deg);
+}
+
+/* --- COLORES MAESTROS DE LA OSCURIDAD --- */
+/* --- COLORES MAESTROS DE LA OSCURIDAD (PREMIUM) --- */
+body.modo-oscuro {
+  --fondo-oscuro: #0f0a07;        /* Negro café muy profundo */
+  --panel-oscuro: #38220F;        /* Marrón chocolate para tarjetas */
+  --acento-oro: #d4a373;          /* Tono miel/oro para botones */
+  --texto-claro: #fdfbf7;         /* Blanco cremoso */
+  --texto-gris: #a67b4d;          /* Marrón claro para subtítulos */
+  --borde-elegante: rgba(212, 163, 115, 0.15); /* Borde sutil dorado */
+
+  background-color: var(--fondo-oscuro);
+  color: var(--texto-claro);
+}
+
+/* Forzamos a que los títulos y textos sean claros */
+body.modo-oscuro h1,
+body.modo-oscuro h2,
+body.modo-oscuro h3,
+body.modo-oscuro p {
+  color: #FDFBF7 !important;
+}
+
+/* Excepción: El texto del Hero (Portada) se queda igual porque la foto de fondo no cambia */
+body.modo-oscuro #inicio h1 {
+  color: #38220F !important; 
+}
+body.modo-oscuro #inicio p {
+  color: #5C3A21 !important;
+}
+
+/* --- COMPONENTES ESPECÍFICOS EN LA OSCURIDAD --- */
+/* Tarjetas del catálogo */
+
+body.modo-oscuro .precio {
+  color: #D4A373 !important; /* Un dorado caramelo para que resalte en la oscuridad */
+}
+
+/* Formularios y Modales (Carrito y Producto) */
+body.modo-oscuro .modal-contenido,
+body.modo-oscuro .item-carrito,
+body.modo-oscuro .resumen-pago {
+  background-color: #2C1A0B;
+  border-color: #4A3018;
+}
+
+/* Las cajas de texto de los inputs */
+body.modo-oscuro input,
+body.modo-oscuro select,
+body.modo-oscuro textarea {
+  background-color: #1A0F07;
+  color: #FDFBF7;
+  border-color: #C28F5B;
+}
+
+/* La barra de navegación al hacer scroll */
+body.modo-oscuro .navbar.navbar-scrolled {
+  background-color: rgba(26, 15, 7, 0.95);
+}
+
+/* --- CORRECCIONES DE FONDOS REBELDES (DARK MODE) --- */
+
+/* 1. Base principal de toda la página */
+body.modo-oscuro {
+  background-color: var(--fondo-oscuro) !important;
+}
+
+/* 2. EFECTO ZEBRA: Beneficios y Contacto (Secciones un poco más claras) */
+body.modo-oscuro #beneficios,
+body.modo-oscuro .beneficios,
+body.modo-oscuro #contacto {
+  background-color: var(--panel-oscuro) !important;
+}
+
+/* 3. EFECTO ZEBRA: Productos / Catálogo (Sección bien oscura para resaltar tarjetas) */
+body.modo-oscuro #productos,
+body.modo-oscuro .catalogo-contenedor {
+  background-color: var(--fondo-oscuro) !important;
+}
+
+/* 4. LA MAGIA DE LA OLA: Forzamos al SVG del Hero a que pinte del mismo color que Beneficios */
+body.modo-oscuro #inicio svg path,
+body.modo-oscuro .hero svg path {
+  fill: var(--panel-oscuro) !important;
+  transition: fill 0.5s ease; /* Transición suave al cambiar de modo */
+}
+
+/* 2. La tarjeta blanca del formulario de Contacto */
+body.modo-oscuro .contacto-contenedor,
+body.modo-oscuro .tarjeta-contacto,
+body.modo-oscuro form,
+body.modo-oscuro .contenedor-formulario {
+  background-color: #2C1A0B !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* 3. Rescatamos el texto invisible de "Hablemos" */
+body.modo-oscuro form h2,
+body.modo-oscuro form h3,
+body.modo-oscuro form label {
+  color: #FDFBF7 !important;
+}
+
+/* 4. Botones de Filtros (Todas, Clásica, Especial, Box) */
+body.modo-oscuro .btn-filtro {
+  background-color: #2C1A0B;
+  color: #FDFBF7;
+  border: 1px solid #4A3018;
+}
+
+/* Cuando el filtro está activo o pasas el mouse */
+body.modo-oscuro .btn-filtro:hover,
+body.modo-oscuro .btn-filtro.activo {
+  background-color: #C28F5B;
+  color: #ffffff;
+  border-color: #C28F5B;
+}
+
+/* =========================================
+   ESTILOS DEL BUSCADOR INTELIGENTE
+   ========================================= */
+
+.controles-catalogo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 35px;
+}
+
+.input-buscador {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: 2px solid #EADDCD;
+  width: 100%;
+  min-width: 280px;
+  font-size: 1rem;
+  color: #38220F;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.input-buscador:focus {
+  border-color: #C28F5B;
+  box-shadow: 0 4px 15px rgba(194, 143, 91, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Adaptación automática para el Modo Oscuro */
+body.modo-oscuro .input-buscador {
+  background-color: #2C1A0B;
+  border-color: #4A3018;
+  color: #FDFBF7;
+}
+
+body.modo-oscuro .input-buscador:focus {
+  border-color: #D4A373;
+}
+
+/* =========================================
+   MEJORAS VISUALES: DISEÑO PREMIUM (DARK MODE)
+   ========================================= */
+
+/* 1. Tarjetas de Chocotejas con efecto de elevación premium */
+body.modo-oscuro .tarjeta-chocoteja {
+  background-color: var(--panel-oscuro);
+  border: 1px solid var(--borde-elegante);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra base suave */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+body.modo-oscuro .tarjeta-chocoteja:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  border-color: var(--acento-oro);
+}
+
+/* 2. Botones de Acción más llamativos (Añadir al carrito) */
+/* Aseguramos que aplique a tus botones primarios en modo oscuro */
+body.modo-oscuro button[style*="background-color"],
+body.modo-oscuro .btn-primario {
+  background-color: var(--acento-oro) !important;
+  color: #1a0f07 !important; /* Letra oscura para máximo contraste */
+  font-weight: bold;
+  border: none !important;
+  transition: all 0.3s ease;
+}
+
+body.modo-oscuro button[style*="background-color"]:hover,
+body.modo-oscuro .btn-primario:hover {
+  background-color: #bfa07d !important;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(212, 163, 115, 0.4);
+}
+
+/* 3. Navbar con efecto cristal (Glassmorphism) */
+body.modo-oscuro .navbar, 
+body.modo-oscuro .barra-navegacion {
+  background-color: rgba(15, 10, 7, 0.85) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--borde-elegante);
+}
+
+/* 4. Mejoras en el Modal (Carrito y Detalles) */
+body.modo-oscuro .modal-contenido {
+  background-color: var(--panel-oscuro) !important;
+  border: 1px solid var(--borde-elegante);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* 5. EFECTO ZEBRA FINAL: Separación del Footer */
+body.modo-oscuro footer,
+body.modo-oscuro .footer,
+body.modo-oscuro .pie-pagina {
+  background-color: var(--fondo-oscuro) !important; /* Vuelve al casi negro */
+  border-top: 1px solid var(--borde-elegante); /* Línea dorada sutil divisoria */
+}

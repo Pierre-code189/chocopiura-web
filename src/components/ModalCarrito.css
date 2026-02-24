@@ -1,0 +1,356 @@
+/* =========================================
+   ESTILOS EXCLUSIVOS DEL CARRITO Y CHECKOUT
+   ========================================= */
+
+/* --- LISTA DE PRODUCTOS --- */
+.lista-carrito { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  margin-bottom: 20px; 
+  max-height: 200px; 
+  overflow-y: auto; 
+  padding-right: 5px; 
+}
+
+/* Personalizamos la barra de scroll pequeña dentro de la lista */
+.lista-carrito::-webkit-scrollbar { 
+  width: 5px; 
+}
+
+.lista-carrito::-webkit-scrollbar-thumb { 
+  background: #C28F5B; 
+  border-radius: 5px; 
+}
+
+/* --- TARJETAS INDIVIDUALES DEL CARRITO --- */
+.item-carrito { 
+  background-color: #FFFFFF; 
+  border: 1px solid #EADDCD; 
+  border-radius: 8px; 
+  padding: 10px 15px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
+
+.item-info { 
+  display: flex; 
+  flex-direction: column; 
+  text-align: left; 
+}
+
+.item-nombre { 
+  font-weight: bold; 
+  font-size: 1rem; 
+  color: #38220F; 
+}
+
+.item-precio { 
+  font-size: 0.85rem; 
+  color: #A67B4D; 
+  font-weight: bold; 
+}
+
+/* --- CONTROLES DE CANTIDAD (+ / - / Eliminar) --- */
+.item-controles { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+}
+
+.item-controles button { 
+  background-color: #EADDCD; 
+  border: none; 
+  color: #38220F; 
+  width: 28px; 
+  height: 28px; 
+  border-radius: 5px; 
+  font-weight: bold; 
+  font-size: 1.1rem; 
+  cursor: pointer; 
+  transition: background-color 0.2s; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.item-controles button:hover { 
+  background-color: #C28F5B; 
+  color: white; 
+}
+
+.item-controles .item-cantidad { 
+  font-weight: bold; 
+  width: 20px; 
+  text-align: center; 
+  color: #38220F; 
+}
+
+.item-controles .btn-eliminar { 
+  background-color: #ffeaea; 
+  margin-left: 5px; 
+  font-size: 0.9rem; 
+}
+
+.item-controles .btn-eliminar:hover { 
+  background-color: #e74c3c; 
+}
+
+/* --- FORMULARIO DE ENVÍO Y SELECTORES --- */
+.formulario-envio { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  margin-bottom: 10px; 
+}
+
+.formulario-envio input, 
+.formulario-envio select { 
+  width: 100%; 
+  padding: 12px; 
+  border-radius: 8px; 
+  border: 1px solid #C28F5B; 
+  background-color: white; 
+  color: #38220F; 
+  box-sizing: border-box; 
+  font-family: inherit;
+}
+
+.formulario-envio input:focus, 
+.formulario-envio select:focus {
+  outline: none;
+  border-color: #8B4513;
+}
+
+/* --- RESUMEN DE PAGO (EL TICKET) --- */
+.resumen-pago { 
+  background-color: rgba(56, 34, 15, 0.05); 
+  padding: 15px; 
+  border-radius: 8px; 
+  margin-top: 15px; 
+  border: 1px dashed #C28F5B; 
+}
+
+.resumen-fila { 
+  display: flex; 
+  justify-content: space-between; 
+  margin-bottom: 8px; 
+  color: #5C3A21; 
+  font-size: 0.95rem; 
+}
+
+.resumen-fila.total { 
+  margin-top: 12px; 
+  padding-top: 12px; 
+  border-top: 1px solid rgba(194, 143, 91, 0.3); 
+  font-weight: bold; 
+  color: #8B4513; 
+  font-size: 1.15rem; 
+}
+
+/* --- BOTONES INFERIORES DE ACCIÓN --- */
+.botones-pedido { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  margin-top: 15px; 
+}
+
+.btn-whatsapp { 
+  background-color: #25d366; 
+  color: white; 
+  width: 100%; 
+  padding: 12px; 
+  border: none; 
+  border-radius: 8px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: background-color 0.3s;
+}
+
+.btn-whatsapp:hover:not(:disabled) { 
+  background-color: #1ebe57; 
+}
+
+.btn-vaciar { 
+  background-color: #e74c3c; 
+  color: white; 
+  width: 100%; 
+  padding: 12px; 
+  border: none; 
+  border-radius: 8px; 
+  font-weight: bold; 
+  cursor: pointer; 
+  transition: background-color 0.3s;
+}
+
+.btn-vaciar:hover { 
+  background-color: #c0392b; 
+}
+
+/* --- SECCIÓN DE CUPONES --- */
+.seccion-cupon {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed rgba(194, 143, 91, 0.4);
+}
+
+.contenedor-input-cupon {
+  display: flex;
+  gap: 10px;
+}
+
+.input-cupon {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #C28F5B;
+  background-color: white;
+  color: #38220F;
+  text-transform: uppercase; /* Siempre muestra mayúsculas */
+  font-family: inherit;
+}
+
+body.modo-oscuro .input-cupon {
+  background-color: #1A0F07;
+  color: #FDFBF7;
+}
+
+.btn-cupon {
+  background-color: #C28F5B;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-cupon:hover { background-color: #A67B4D; }
+
+/* Mensajitos de éxito o error */
+.mensaje-cupon {
+  font-size: 0.85rem;
+  margin: 5px 0 0 5px;
+  font-weight: bold;
+}
+.mensaje-cupon.exito { color: #2ecc71; }
+.mensaje-cupon.error { color: #e74c3c; }
+
+/* El cupón cuando ya está aplicado */
+.cupon-activo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(46, 204, 113, 0.1);
+  border: 1px solid #2ecc71;
+  color: #27ae60;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.btn-quitar-cupon {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* La fila roja de descuento en el ticket */
+.resumen-fila.descuento {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+/* --- ANIMACIÓN ESTADO VACÍO (EMPTY STATE) --- */
+.carrito-vacio-animado { 
+  text-align: center; 
+  padding: 20px 10px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 10px; 
+}
+
+.icono-vacio { 
+  width: 90px; 
+  height: 90px; 
+  color: #C28F5B; 
+  margin-bottom: 10px; 
+  animation: flotar 3s ease-in-out infinite; 
+}
+
+.carrito-vacio-animado p { 
+  color: #5C3A21; 
+  margin-bottom: 25px; 
+  font-size: 0.95rem; 
+  line-height: 1.5; 
+}
+
+@keyframes flotar { 
+  0% { transform: translateY(0px); } 
+  50% { transform: translateY(-12px); } 
+  100% { transform: translateY(0px); } 
+}
+
+/* --- ANIMACIÓN DEL BOTÓN DE CARGA (SPINNER) --- */
+.contenedor-spinner { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 10px; 
+}
+
+.spinner-icono { 
+  width: 18px; 
+  height: 18px; 
+  border: 3px solid rgba(255, 255, 255, 0.3); 
+  border-top: 3px solid #ffffff; 
+  border-radius: 50%; 
+  animation: girar-spinner 1s linear infinite; 
+}
+
+@keyframes girar-spinner { 
+  0% { transform: rotate(0deg); } 
+  100% { transform: rotate(360deg); } 
+}
+
+/* --- ALERTA DE HORARIO --- */
+.alerta-horario {
+  background-color: #ffeaea;
+  border-left: 4px solid #e74c3c;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.alerta-horario p {
+  margin: 0;
+  color: #c0392b;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+body.modo-oscuro .alerta-horario {
+  background-color: rgba(231, 76, 60, 0.1);
+  border-left-color: #e74c3c;
+}
+body.modo-oscuro .alerta-horario p {
+  color: #ff9999;
+}
+
+/* --- BOTÓN DESACTIVADO --- */
+.btn-whatsapp.btn-desactivado {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.btn-whatsapp.btn-desactivado:hover {
+  background-color: #7f8c8d;
+}

@@ -1,0 +1,52 @@
+/* Heredamos el borde suave y la sombra de la tarjeta original */
+.skeleton-tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: default; /* Para que no parezca que se puede hacer clic */
+}
+
+/* --- LA ANIMACIÓN MAGICA DE CARGA --- */
+/* Esto hace que el color vaya de un crema oscuro a uno claro infinitamente */
+@keyframes pulso-carga {
+  0% { background-color: #EADDCD; }
+  50% { background-color: #F5EBE1; }
+  100% { background-color: #EADDCD; }
+}
+
+/* --- LAS PIEZAS FANTASMAS --- */
+/* A todas les aplicamos la misma animación de pulso */
+.skeleton-imagen {
+  width: calc(100% + 40px);
+  height: 200px;
+  margin: -20px -20px 15px -20px;
+  animation: pulso-carga 1.5s infinite ease-in-out;
+}
+
+.skeleton-titulo {
+  height: 24px;
+  width: 70%;
+  border-radius: 6px;
+  animation: pulso-carga 1.5s infinite ease-in-out;
+}
+
+.skeleton-precio {
+  height: 18px;
+  width: 40%;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  animation: pulso-carga 1.5s infinite ease-in-out;
+}
+
+.skeleton-botones {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.skeleton-btn {
+  height: 42px;
+  width: 50%;
+  border-radius: 8px;
+  animation: pulso-carga 1.5s infinite ease-in-out;
+}

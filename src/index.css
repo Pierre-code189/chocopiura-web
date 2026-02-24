@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth; /* ¡La magia para que el menú baje suavemente! */
+}
+
+body {
+  width: 100%;
+  overflow-x: hidden;
+  background-color: #FDFBF7; /* Un color crema muy elegante tipo repostería */
+  color: #4A3018; /* Texto color chocolate oscuro */
+  font-family: 'Georgia', serif; /* Letra más clásica y artesanal */
+}
+
+/* Títulos con letra un poco más moderna */
+h1, h2, h3, h4, h5 {
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #38220F; 
+}
