@@ -18,7 +18,8 @@ function Contacto() {
         nombre: form.current.user_name.value,
         email: form.current.user_email.value,
         mensaje: form.current.message.value,
-        fecha: new Date().toLocaleString() // Guardamos la fecha y hora exacta
+        fecha: new Date().toLocaleString(), // Guardamos la fecha y hora exacta
+        isDeleted: false
       });
 
       // Acción 2: Enviar la alerta a tu correo (EmailJS)

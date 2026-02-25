@@ -125,7 +125,8 @@ function ModalCarrito({
         descuento: descuentoMonto,
         totalPagado: totalCalculado,
         fecha: new Date().toLocaleString(),
-        estado: 'Pendiente ⏳'
+        estado: 'Pendiente ⏳',
+        isDeleted: false
       });
 
       const numeroWhatsApp = "+51 975 075 015"; 
