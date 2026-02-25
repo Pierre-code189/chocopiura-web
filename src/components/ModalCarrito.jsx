@@ -128,7 +128,7 @@ function ModalCarrito({
         estado: 'Pendiente ⏳'
       });
 
-      const numeroWhatsApp = "51999999999"; 
+      const numeroWhatsApp = "+51 975 075 015"; 
       const textoPedido = carrito.map((item) => `${item.cantidad}x ${item.sabor} (S/ ${(item.precio * item.cantidad).toFixed(2)})`).join('\n- ');
       const textoDescuento = descuentoMonto > 0 ? `*🏷️ Descuento (${cuponAplicado.codigo}):* - S/ ${descuentoMonto.toFixed(2)}\n` : '';
 
