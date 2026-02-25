@@ -5,10 +5,11 @@ function ModalProducto({ producto, cerrarModal, agregarAlCarrito }) {
   if (!producto) return null; 
 
   // 🧠 UNIFICADOR DE IMÁGENES: Junta la lógica vieja y la nueva en una sola lista garantizada
-  const fotosAMostrar = (producto.imagenes && producto.imagenes.length > 0)
-    ? producto.imagenes
-    : producto.imagenUrl
-      ? [producto.imagenUrl] // Lo convertimos en lista para que el .map() funcione
+  // 🧠 NUEVA PRIORIDAD: El CRM manda. 
+  const fotosAMostrar = producto.imagenUrl
+    ? [producto.imagenUrl] 
+    : (producto.imagenes && producto.imagenes.length > 0)
+      ? producto.imagenes
       : ["https://images.unsplash.com/photo-1511381939415-e440c88218ce?auto=format&fit=crop&w=400&q=80"];
 
   return (

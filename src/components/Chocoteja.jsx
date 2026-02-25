@@ -2,10 +2,11 @@ import './Chocoteja.css'
 
 function Chocoteja({ producto, alAgregar, alVerDetalles }) { 
   // 🧠 LÓGICA INTELIGENTE: Revisa el array, si no, revisa imagenUrl, si no, usa la foto por defecto
-  const imagenPrincipal = (producto.imagenes && producto.imagenes.length > 0)
-    ? producto.imagenes[0] 
-    : producto.imagenUrl 
-      ? producto.imagenUrl 
+  // 🧠 NUEVA PRIORIDAD: El CRM manda (imagenUrl). Si no hay, busca el array viejo.
+  const imagenPrincipal = producto.imagenUrl 
+    ? producto.imagenUrl 
+    : (producto.imagenes && producto.imagenes.length > 0)
+      ? producto.imagenes[0]
       : "https://images.unsplash.com/photo-1511381939415-e440c88218ce?auto=format&fit=crop&w=400&q=80";
 
   // Si por error olvidamos poner el precio, evitamos que la app se rompa
