@@ -1,10 +1,12 @@
 import './Chocoteja.css'
 
 function Chocoteja({ producto, alAgregar, alVerDetalles }) { 
-  // PROGRAMACIÓN DEFENSIVA: Si no hay imágenes, usamos una de relleno
-  const imagenPrincipal = producto.imagenes && producto.imagenes.length > 0 
+  // 🧠 LÓGICA INTELIGENTE: Revisa el array, si no, revisa imagenUrl, si no, usa la foto por defecto
+  const imagenPrincipal = (producto.imagenes && producto.imagenes.length > 0)
     ? producto.imagenes[0] 
-    : "https://images.unsplash.com/photo-1511381939415-e440c88218ce?auto=format&fit=crop&w=400&q=80"; // Foto por defecto
+    : producto.imagenUrl 
+      ? producto.imagenUrl 
+      : "https://images.unsplash.com/photo-1511381939415-e440c88218ce?auto=format&fit=crop&w=400&q=80";
 
   // Si por error olvidamos poner el precio, evitamos que la app se rompa
   const precioSeguro = producto.precio ? producto.precio : 0;

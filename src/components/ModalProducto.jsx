@@ -4,6 +4,13 @@ function ModalProducto({ producto, cerrarModal, agregarAlCarrito }) {
   // Si no hay ningún producto seleccionado, no dibujamos la ventana
   if (!producto) return null; 
 
+  // 🧠 UNIFICADOR DE IMÁGENES: Junta la lógica vieja y la nueva en una sola lista garantizada
+  const fotosAMostrar = (producto.imagenes && producto.imagenes.length > 0)
+    ? producto.imagenes
+    : producto.imagenUrl
+      ? [producto.imagenUrl] // Lo convertimos en lista para que el .map() funcione
+      : ["https://images.unsplash.com/photo-1511381939415-e440c88218ce?auto=format&fit=crop&w=400&q=80"];
+
   return (
     <div className="modal-fondo">
       <div className="modal-contenido modal-producto">
@@ -16,9 +23,9 @@ function ModalProducto({ producto, cerrarModal, agregarAlCarrito }) {
           {producto.categoria}
         </span>
         
-        {/* Carrusel de imágenes */}
+        {/* Carrusel de imágenes (Ahora funciona con ambos sistemas) */}
         <div className="pasarela-fotos">
-          {producto.imagenes && producto.imagenes.map((imgUrl, index) => (
+          {fotosAMostrar.map((imgUrl, index) => (
             <img 
               key={index} 
               src={imgUrl} 
