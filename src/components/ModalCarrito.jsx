@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc, doc, getDoc } from 'firebase/firestore'; /* <-- Añadimos doc y getDoc */
+import { collection, getDocs, addDoc, doc, getDoc } from 'firebase/firestore'; 
 import { db } from '../firebase'; 
 import './ModalCarrito.css';
 
@@ -17,6 +17,8 @@ function ModalCarrito({
 }) {
   
   const [nombre, setNombre] = useState('');
+  // 1. NUEVO ESTADO: Variable para almacenar el teléfono
+  const [telefono, setTelefono] = useState(''); 
   const [zonaEnvio, setZonaEnvio] = useState(zonasDelivery[0]);
   const [direccionExacta, setDireccionExacta] = useState('');
   const [metodoPago, setMetodoPago] = useState('Yape');
@@ -27,9 +29,8 @@ function ModalCarrito({
   const [mensajeCupon, setMensajeCupon] = useState({ texto: '', tipo: '' });
   const [validandoCupon, setValidandoCupon] = useState(false); 
 
-  // --- NUEVO: HORARIOS DINÁMICOS DESDE FIREBASE ---
-  const [horaApertura, setHoraApertura] = useState(0); // Valores por defecto
-  const [horaCierre, setHoraCierre] = useState(23);
+  const [horaApertura, setHoraApertura] = useState(9); 
+  const [horaCierre, setHoraCierre] = useState(22);
   const [cargandoHorario, setCargandoHorario] = useState(true);
 
   useEffect(() => {
@@ -52,7 +53,6 @@ function ModalCarrito({
   }, [isCarritoAbierto]);
 
   const horaActual = new Date().getHours(); 
-  // La tienda está abierta si no está cargando y la hora actual está dentro del rango
   const estaAbierto = !cargandoHorario && (horaActual >= horaApertura && horaActual < horaCierre);
 
   if (!isCarritoAbierto) return null;
@@ -101,13 +101,24 @@ function ModalCarrito({
 
   const manejarVaciarCarrito = () => {
     vaciarCarrito();
-    setNombre(''); setDireccionExacta(''); setZonaEnvio(zonasDelivery[0]);
+    setNombre(''); 
+    setTelefono(''); // <-- Limpiamos el teléfono al vaciar
+    setDireccionExacta(''); 
+    setZonaEnvio(zonasDelivery[0]);
     quitarCupon(); 
   };
 
   const enviarPedidoWhatsApp = async () => {
     if (!estaAbierto) return; 
     if (nombre.trim() === '') { alert('Por favor, completa tu nombre.'); return; }
+    
+    // 2. VALIDACIÓN ESTRICTA (REGEX): Exactamente 9 dígitos numéricos
+    const regexCelular = /^[0-9]{9}$/;
+    if (!regexCelular.test(telefono)) {
+      alert('Por favor, ingresa un número de WhatsApp válido (9 dígitos numéricos, ej: 987654321).'); 
+      return; 
+    }
+
     if (zonaEnvio.precio > 0 && direccionExacta.trim() === '') { alert('Por favor, indica tu dirección exacta.'); return; }
 
     setEstaProcesando(true);
@@ -115,8 +126,10 @@ function ModalCarrito({
     try {
       const resumenItems = carrito.map(item => `${item.cantidad}x ${item.sabor}`).join(', ');
 
+      // 3. ACTUALIZACIÓN A FIRESTORE: Inyección de la nueva variable
       await addDoc(collection(db, "pedidos"), {
         cliente: nombre,
+        telefono: telefono, // <-- El dato limpio para la IA del CRM
         zona: zonaEnvio.nombre,
         direccion: direccionExacta || 'Recojo en tienda',
         metodoPago: metodoPago,
@@ -126,14 +139,15 @@ function ModalCarrito({
         totalPagado: totalCalculado,
         fecha: new Date().toLocaleString(),
         estado: 'Pendiente ⏳',
-        isDeleted: false
+        isDeleted: false 
       });
 
-      const numeroWhatsApp = "+51 975075015"; 
+      const numeroWhatsApp = "+51 975 075 015"; 
       const textoPedido = carrito.map((item) => `${item.cantidad}x ${item.sabor} (S/ ${(item.precio * item.cantidad).toFixed(2)})`).join('\n- ');
       const textoDescuento = descuentoMonto > 0 ? `*🏷️ Descuento (${cuponAplicado.codigo}):* - S/ ${descuentoMonto.toFixed(2)}\n` : '';
 
       const mensaje = `¡Hola! Soy *${nombre}*.\nQuiero hacer un pedido de ChocoPiura.\n\n` +
+                      `*📱 Mi WhatsApp:* ${telefono}\n` +
                       `*🛵 Entrega:* ${zonaEnvio.nombre} (S/ ${costoEnvio.toFixed(2)})\n` +
                       `*📍 Dirección:* ${direccionExacta || 'Pasará a recoger'}\n` +
                       `*💳 Pago:* ${metodoPago}\n\n` +
@@ -179,6 +193,16 @@ function ModalCarrito({
             
             <div className="formulario-envio">
               <input type="text" placeholder="Tu Nombre completo" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={!estaAbierto} />
+              
+              {/* NUEVO INPUT UI: Forzamos a que solo acepte números y un máximo de 9 caracteres visualmente */}
+              <input 
+                type="tel" 
+                placeholder="Teléfono (WhatsApp) ej. 987654321" 
+                value={telefono} 
+                onChange={(e) => setTelefono(e.target.value.replace(/\D/g, '').slice(0, 9))} 
+                disabled={!estaAbierto} 
+              />
+
               <select value={zonaEnvio.id} onChange={(e) => { setZonaEnvio(zonasDelivery.find(z => z.id === e.target.value)); }} disabled={!estaAbierto}>
                 {zonasDelivery.map(zona => ( <option key={zona.id} value={zona.id}>{zona.nombre} {zona.precio > 0 ? `(+ S/ ${zona.precio.toFixed(2)})` : '(Gratis)'}</option> ))}
               </select>
