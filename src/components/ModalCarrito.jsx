@@ -28,8 +28,8 @@ function ModalCarrito({
   const [validandoCupon, setValidandoCupon] = useState(false); 
 
   // --- NUEVO: HORARIOS DINÁMICOS DESDE FIREBASE ---
-  const [horaApertura, setHoraApertura] = useState(9); // Valores por defecto
-  const [horaCierre, setHoraCierre] = useState(22);
+  const [horaApertura, setHoraApertura] = useState(0); // Valores por defecto
+  const [horaCierre, setHoraCierre] = useState(23);
   const [cargandoHorario, setCargandoHorario] = useState(true);
 
   useEffect(() => {
@@ -129,7 +129,7 @@ function ModalCarrito({
         isDeleted: false
       });
 
-      const numeroWhatsApp = "+51 975 075 015"; 
+      const numeroWhatsApp = "+51 975075015"; 
       const textoPedido = carrito.map((item) => `${item.cantidad}x ${item.sabor} (S/ ${(item.precio * item.cantidad).toFixed(2)})`).join('\n- ');
       const textoDescuento = descuentoMonto > 0 ? `*🏷️ Descuento (${cuponAplicado.codigo}):* - S/ ${descuentoMonto.toFixed(2)}\n` : '';
 
