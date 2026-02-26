@@ -39,8 +39,10 @@ function ModalCarrito({
         try {
           const docSnap = await getDoc(doc(db, "configuracion", "tienda"));
           if (docSnap.exists()) {
-            setHoraApertura(docSnap.data().apertura);
-            setHoraCierre(docSnap.data().cierre);
+            const data = docSnap.data();
+            // 👇 NUEVO: Usamos parseInt para convertir el texto "09:00:00" en un número real
+            setHoraApertura(parseInt(data.apertura, 10));
+            setHoraCierre(parseInt(data.cierre, 10));
           }
         } catch (error) {
           console.error("Error cargando horarios:", error);
