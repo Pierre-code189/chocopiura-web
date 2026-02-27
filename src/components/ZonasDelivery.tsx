@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, addDoc, updateDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase'; // Ajusta la ruta según tu estructura
+import { db } from '../firebase'; // Ajusta la ruta según la estructura de tus carpetas
 
-// 1. Tipado estricto para evitar crasheos en Vercel
 export interface ZonaDelivery {
-  id?: string; // Opcional porque al crear uno nuevo aún no tiene ID de Firestore
+  id?: string;
   nombre: string;
   tarifa: number;
   activo: boolean;
 }
 
 interface ZonasDeliveryProps {
-  tenantId: string; // REGLA #2: Obligatorio para aislar los datos del cliente
+  tenantId: string;
 }
 
 const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
   const [zonas, setZonas] = useState<ZonaDelivery[]>([]);
   const [cargando, setCargando] = useState<boolean>(true);
   
-  // Estados para el formulario modal
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [zonaEditando, setZonaEditando] = useState<ZonaDelivery | null>(null);
   const [formData, setFormData] = useState({ nombre: '', tarifa: 0, activo: true });
 
-  // Referencia estricta a la subcolección del tenant actual
-  const zonasRef = collection(db, 'clientes_config', tenantId, 'zonas_delivery');
+  // 1️⃣ RUTA CORREGIDA: Apunta a la raíz de la colección según tu JSON
+  const zonasRef = collection(db, 'zonas_delivery');
 
   useEffect(() => {
     cargarZonas();
@@ -39,7 +37,8 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
         id: docSnap.id,
         nombre: docSnap.data().nombre,
         tarifa: docSnap.data().tarifa,
-        activo: docSnap.data().activo,
+        // Fallback defensivo por si un registro antiguo no tiene el campo 'activo'
+        activo: docSnap.data().activo !== undefined ? docSnap.data().activo : true, 
       }));
       setZonas(listaZonas);
     } catch (error) {
@@ -67,9 +66,9 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
 
   const handleToggleActivo = async (id: string, estadoActual: boolean) => {
     try {
-      const zonaDocRef = doc(db, 'clientes_config', tenantId, 'zonas_delivery', id);
+      // 2️⃣ RUTA CORREGIDA PARA ACTUALIZAR
+      const zonaDocRef = doc(db, 'zonas_delivery', id);
       await updateDoc(zonaDocRef, { activo: !estadoActual });
-      // Actualizamos el estado local para no tener que recargar toda la base de datos
       setZonas(zonas.map(z => z.id === id ? { ...z, activo: !estadoActual } : z));
     } catch (error) {
       console.error("Error al cambiar el estado de la zona:", error);
@@ -79,7 +78,6 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
   const handleGuardar = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validación básica
     if (formData.nombre.trim() === '' || formData.tarifa < 0) {
       alert("Por favor, ingresa un nombre válido y una tarifa igual o mayor a 0.");
       return;
@@ -87,15 +85,15 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
 
     try {
       if (zonaEditando && zonaEditando.id) {
-        // Modo Edición
-        const zonaDocRef = doc(db, 'clientes_config', tenantId, 'zonas_delivery', zonaEditando.id);
+        // 3️⃣ RUTA CORREGIDA PARA GUARDAR EDICIÓN
+        const zonaDocRef = doc(db, 'zonas_delivery', zonaEditando.id);
         await updateDoc(zonaDocRef, {
           nombre: formData.nombre,
           tarifa: Number(formData.tarifa),
           activo: formData.activo
         });
       } else {
-        // Modo Creación
+        // NUEVA ZONA
         await addDoc(zonasRef, {
           nombre: formData.nombre,
           tarifa: Number(formData.tarifa),
@@ -103,7 +101,7 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
         });
       }
       handleCloseModal();
-      cargarZonas(); // Recargamos la tabla
+      cargarZonas();
     } catch (error) {
       console.error("Error al guardar la zona:", error);
     }
@@ -123,7 +121,6 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
         </button>
       </div>
 
-      {/* Tabla de Registros */}
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
           <thead className="bg-gray-50">
@@ -140,16 +137,20 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
             ) : (
               zonas.map((zona) => (
                 <tr key={zona.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 border-b">{zona.nombre}</td>
+                  <td className="py-3 px-4 border-b font-medium">{zona.nombre}</td>
                   <td className="py-3 px-4 border-b">S/ {zona.tarifa.toFixed(2)}</td>
                   <td className="py-3 px-4 border-b">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${zona.activo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                      {zona.activo ? 'Activo' : 'Inactivo'}
-                    </span>
+                    {/* 4️⃣ INDICADOR VISUAL ROBUSTO */}
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${zona.activo === true ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                      <span className={`px-2 py-1 text-xs font-bold rounded-full ${zona.activo === true ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                        {zona.activo === true ? 'HABILITADA' : 'INACTIVA'}
+                      </span>
+                    </div>
                   </td>
-                  <td className="py-3 px-4 border-b text-center flex justify-center gap-2">
-                    <button onClick={() => handleOpenModal(zona)} className="text-blue-500 hover:text-blue-700">Editar</button>
-                    <button onClick={() => handleToggleActivo(zona.id!, zona.activo)} className="text-gray-500 hover:text-gray-700">
+                  <td className="py-3 px-4 border-b text-center flex justify-center gap-3">
+                    <button onClick={() => handleOpenModal(zona)} className="text-blue-500 hover:text-blue-700 font-medium">Editar</button>
+                    <button onClick={() => handleToggleActivo(zona.id!, zona.activo)} className="text-gray-500 hover:text-gray-700 font-medium">
                       {zona.activo ? 'Desactivar' : 'Activar'}
                     </button>
                   </td>
@@ -160,14 +161,13 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
         </table>
       </div>
 
-      {/* Modal / Formulario (Compatible con DynamicForm si se requiere a futuro) */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-xl">
             <h3 className="text-xl font-bold mb-4">{zonaEditando ? 'Editar Zona' : 'Nueva Zona'}</h3>
             <form onSubmit={handleGuardar}>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Nombre de la Zona</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Nombre de la Zona/Distrito</label>
                 <input 
                   type="text" 
                   value={formData.nombre} 
@@ -178,7 +178,7 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">Tarifa (S/)</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Costo de Envío (S/)</label>
                 <input 
                   type="number" 
                   step="0.10"
@@ -189,21 +189,22 @@ const ZonasDelivery: React.FC<ZonasDeliveryProps> = ({ tenantId }) => {
                   required 
                 />
               </div>
-              <div className="mb-6 flex items-center">
+              <div className="mb-6 flex items-center bg-gray-50 p-3 rounded border">
+                {/* 5️⃣ CHECKBOX GARANTIZADO */}
                 <input 
                   type="checkbox" 
-                  checked={formData.activo}
+                  checked={!!formData.activo}
                   onChange={(e) => setFormData({...formData, activo: e.target.checked})}
-                  className="mr-2 leading-tight"
+                  className="w-5 h-5 mr-3 accent-blue-600 cursor-pointer"
                   id="activoCheck"
                 />
-                <label className="text-sm text-gray-700 font-bold" htmlFor="activoCheck">
-                  Zona Activa (Visible para el Bot)
+                <label className="text-sm text-gray-800 font-bold cursor-pointer select-none" htmlFor="activoCheck">
+                  ¿Zona Habilitada? (Visible para el Bot)
                 </label>
               </div>
-              <div className="flex justify-end gap-2">
-                <button type="button" onClick={handleCloseModal} className="px-4 py-2 bg-gray-300 hover:bg-gray-400 rounded text-gray-800">Cancelar</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-bold">Guardar</button>
+              <div className="flex justify-end gap-3">
+                <button type="button" onClick={handleCloseModal} className="px-4 py-2 border border-gray-300 hover:bg-gray-100 rounded text-gray-800 font-medium transition-colors">Cancelar</button>
+                <button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-bold shadow-sm transition-colors">Guardar Registro</button>
               </div>
             </form>
           </div>
