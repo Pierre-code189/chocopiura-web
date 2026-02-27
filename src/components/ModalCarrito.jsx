@@ -1,15 +1,7 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, addDoc, doc, getDoc } from 'firebase/firestore'; 
+import { collection, getDocs, addDoc, doc, getDoc, query, where } from 'firebase/firestore'; 
 import { db } from '../firebase'; 
 import './ModalCarrito.css';
-
-const zonasDelivery = [
-  { id: 'recojo', nombre: 'Recojo en Tienda', precio: 0 },
-  { id: 'centro', nombre: 'Piura Centro', precio: 3.50 },
-  { id: 'castilla', nombre: 'Castilla', precio: 5.00 },
-  { id: 'miraflores', nombre: 'Miraflores', precio: 4.00 },
-  { id: 'veintiseis', nombre: '26 de Octubre', precio: 6.00 }
-];
 
 function ModalCarrito({ 
   carrito, isCarritoAbierto, cerrarModal, vaciarCarrito, 
@@ -17,9 +9,14 @@ function ModalCarrito({
 }) {
   
   const [nombre, setNombre] = useState('');
-  // 1. NUEVO ESTADO: Variable para almacenar el teléfono
   const [telefono, setTelefono] = useState(''); 
-  const [zonaEnvio, setZonaEnvio] = useState(zonasDelivery[0]);
+  
+  // 1. NUEVO: Estados dinámicos para las zonas de delivery
+  const [zonasDelivery, setZonasDelivery] = useState([
+    { id: 'recojo', nombre: 'Recojo en Tienda', precio: 0 }
+  ]);
+  const [zonaEnvio, setZonaEnvio] = useState({ id: 'recojo', nombre: 'Recojo en Tienda', precio: 0 });
+  
   const [direccionExacta, setDireccionExacta] = useState('');
   const [metodoPago, setMetodoPago] = useState('Yape');
   const [estaProcesando, setEstaProcesando] = useState(false);
@@ -33,6 +30,38 @@ function ModalCarrito({
   const [horaCierre, setHoraCierre] = useState(22);
   const [cargandoHorario, setCargandoHorario] = useState(true);
 
+  // 2. NUEVO EFECTO: Cargar las Zonas de Delivery Dinámicamente
+  useEffect(() => {
+    const fetchZonasDelivery = async () => {
+      if (isCarritoAbierto) {
+        try {
+          // Consultamos a Firebase solo por las zonas que tengan el checkbox de "activo" en true
+          const q = query(
+            collection(db, "zonas_delivery"), 
+            where("activo", "==", true)
+          );
+          const querySnapshot = await getDocs(q);
+          
+          const zonasCargadas = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            nombre: doc.data().nombre,
+            precio: doc.data().tarifa
+          }));
+
+          // Mantenemos "Recojo en Tienda" siempre como la primera opción gratuita
+          setZonasDelivery([
+            { id: 'recojo', nombre: 'Recojo en Tienda', precio: 0 },
+            ...zonasCargadas
+          ]);
+        } catch (error) {
+          console.error("Error cargando las zonas de delivery:", error);
+        }
+      }
+    };
+    fetchZonasDelivery();
+  }, [isCarritoAbierto]);
+
+  // Efecto: Cargar Horarios de Atención
   useEffect(() => {
     const fetchHorarios = async () => {
       if (isCarritoAbierto) {
@@ -40,7 +69,6 @@ function ModalCarrito({
           const docSnap = await getDoc(doc(db, "configuracion", "tienda"));
           if (docSnap.exists()) {
             const data = docSnap.data();
-            // 👇 NUEVO: Usamos parseInt para convertir el texto "09:00:00" en un número real
             setHoraApertura(parseInt(data.apertura, 10));
             setHoraCierre(parseInt(data.cierre, 10));
           }
@@ -104,7 +132,7 @@ function ModalCarrito({
   const manejarVaciarCarrito = () => {
     vaciarCarrito();
     setNombre(''); 
-    setTelefono(''); // <-- Limpiamos el teléfono al vaciar
+    setTelefono(''); 
     setDireccionExacta(''); 
     setZonaEnvio(zonasDelivery[0]);
     quitarCupon(); 
@@ -114,7 +142,6 @@ function ModalCarrito({
     if (!estaAbierto) return; 
     if (nombre.trim() === '') { alert('Por favor, completa tu nombre.'); return; }
     
-    // 2. VALIDACIÓN ESTRICTA (REGEX): Exactamente 9 dígitos numéricos
     const regexCelular = /^[0-9]{9}$/;
     if (!regexCelular.test(telefono)) {
       alert('Por favor, ingresa un número de WhatsApp válido (9 dígitos numéricos, ej: 987654321).'); 
@@ -128,10 +155,9 @@ function ModalCarrito({
     try {
       const resumenItems = carrito.map(item => `${item.cantidad}x ${item.sabor}`).join(', ');
 
-      // 3. ACTUALIZACIÓN A FIRESTORE: Inyección de la nueva variable
       await addDoc(collection(db, "pedidos"), {
         cliente: nombre,
-        telefono: telefono, // <-- El dato limpio para la IA del CRM
+        telefono: telefono, 
         zona: zonaEnvio.nombre,
         direccion: direccionExacta || 'Recojo en tienda',
         metodoPago: metodoPago,
@@ -196,7 +222,6 @@ function ModalCarrito({
             <div className="formulario-envio">
               <input type="text" placeholder="Tu Nombre completo" value={nombre} onChange={(e) => setNombre(e.target.value)} disabled={!estaAbierto} />
               
-              {/* NUEVO INPUT UI: Forzamos a que solo acepte números y un máximo de 9 caracteres visualmente */}
               <input 
                 type="tel" 
                 placeholder="Teléfono (WhatsApp) ej. 987654321" 
